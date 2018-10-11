@@ -124,6 +124,7 @@ _setup_prototype(_uc, "uc_strerror", ctypes.c_char_p, ucerr)
 _setup_prototype(_uc, "uc_errno", ucerr, uc_engine)
 _setup_prototype(_uc, "uc_reg_read", ucerr, uc_engine, ctypes.c_int, ctypes.c_void_p)
 _setup_prototype(_uc, "uc_reg_write", ucerr, uc_engine, ctypes.c_int, ctypes.c_void_p)
+_setup_prototype(_uc, "uc_reg_read_batch", ucerr, uc_engine, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_void_p), ctypes.c_int)
 _setup_prototype(_uc, "uc_mem_read", ucerr, uc_engine, ctypes.c_uint64, ctypes.POINTER(ctypes.c_char), ctypes.c_size_t)
 _setup_prototype(_uc, "uc_mem_write", ucerr, uc_engine, ctypes.c_uint64, ctypes.POINTER(ctypes.c_char), ctypes.c_size_t)
 _setup_prototype(_uc, "uc_emu_start", ucerr, uc_engine, ctypes.c_uint64, ctypes.c_uint64, ctypes.c_uint64, ctypes.c_size_t)
@@ -416,6 +417,20 @@ class Uc(object):
         status = _uc.uc_reg_write(self._uch, reg_id, ctypes.byref(reg))
         if status != uc.UC_ERR_OK:
             raise UcError(status)
+
+    # return the value of a batch of registers
+    def reg_read_batch(self, reg_ids, opt=None):
+        reg_ids_ct = (ctypes.c_int * len(reg_ids))(*reg_ids)
+        regs_vals = []
+        regs = (ctypes.c_void_p * len(reg_ids))()
+        for i, reg_val in enumerate(regs):
+            reg_val = ctypes.c_uint64(0)
+            regs_vals.append(reg_val)
+            regs[i] = ctypes.cast(ctypes.byref(reg_val), ctypes.c_void_p)
+        status = _uc.uc_reg_read_batch(self._uch, reg_ids_ct, regs, ctypes.c_int(len(reg_ids)))
+        if status != uc.UC_ERR_OK:
+            raise UcError(status)
+        return [reg.value for reg in regs_vals]
 
     # read from MSR - X86 only
     def msr_read(self, msr_id):

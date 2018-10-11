@@ -59,6 +59,9 @@ def test_arm():
         r1 = mu.reg_read(UC_ARM_REG_R1)
         print(">>> R0 = 0x%x" %r0)
         print(">>> R1 = 0x%x" %r1)
+        (r0b, r1b) = mu.reg_read_batch((UC_ARM_REG_R0, UC_ARM_REG_R1),)
+        print(">>> R0 batch = 0x%x" % r0b)
+        print(">>> R1 batch = 0x%x" % r1b)
 
     except UcError as e:
         print("ERROR: %s" % e)
