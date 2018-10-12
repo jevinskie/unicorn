@@ -422,6 +422,14 @@ static ObjectClass *arm_cpu_class_by_name(struct uc_struct *uc, const char *cpu_
 /* CPU models. These are not needed for the AArch64 linux-user build. */
 #if !defined(CONFIG_USER_ONLY) || !defined(TARGET_AARCH64)
 
+static void arm7tdmi_initfn(struct uc_struct *uc, Object *obj, void *opaque)
+{
+    ARMCPU *cpu = ARM_CPU(uc, obj);
+
+    cpu->dtb_compatible = "arm,arm7tdmi";
+    set_feature(&cpu->env, ARM_FEATURE_V4T);
+}
+
 static void arm926_initfn(struct uc_struct *uc, Object *obj, void *opaque)
 {
     ARMCPU *cpu = ARM_CPU(uc, obj);
@@ -1004,6 +1012,7 @@ typedef struct ARMCPUInfo {
 
 static const ARMCPUInfo arm_cpus[] = {
 #if !defined(CONFIG_USER_ONLY) || !defined(TARGET_AARCH64)
+    { "arm7tdmi",    arm7tdmi_initfn },
     { "arm926",      arm926_initfn },
     { "arm946",      arm946_initfn },
     { "arm1026",     arm1026_initfn },

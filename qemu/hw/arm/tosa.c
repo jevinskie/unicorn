@@ -17,13 +17,16 @@
 #include "exec/address-spaces.h"
 
 
-static int tosa_init(struct uc_struct *uc, MachineState *machine)
+int tosa_init(struct uc_struct *uc, MachineState *machine)
 {
+#if 0
     if (uc->mode & UC_MODE_MCLASS) {
         uc->cpu = (CPUState *)cpu_arm_init(uc, "cortex-m3");
     } else {
         uc->cpu = (CPUState *)cpu_arm_init(uc, "cortex-a15");
     }
+#endif
+    uc->cpu = (CPUState *)cpu_arm_init(uc, "arm7tdmi");
 
     return 0;
 }

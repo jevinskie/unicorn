@@ -60,7 +60,7 @@ def _load_lib(path):
             _load_win_support(path)
 
         lib_file = os.path.join(path, _lib.get(sys.platform, 'libunicorn.so'))
-        #print('Trying to load shared library', lib_file)
+        # print('Trying to load shared library', lib_file)
         dll = ctypes.cdll.LoadLibrary(lib_file)
         #print('SUCCESS')
         return dll
@@ -140,6 +140,7 @@ _setup_prototype(_uc, "uc_free", ucerr, ctypes.c_void_p)
 _setup_prototype(_uc, "uc_context_save", ucerr, uc_engine, uc_context)
 _setup_prototype(_uc, "uc_context_restore", ucerr, uc_engine, uc_context)
 _setup_prototype(_uc, "uc_mem_regions", ucerr, uc_engine, ctypes.POINTER(ctypes.POINTER(_uc_mem_region)), ctypes.POINTER(ctypes.c_uint32))
+_setup_prototype(_uc, "uc_setdbg", ucerr, uc_engine)
 
 # uc_hook_add is special due to variable number of arguments
 _uc.uc_hook_add = _uc.uc_hook_add
@@ -318,6 +319,11 @@ class Uc(object):
     # stop emulation
     def emu_stop(self):
         status = _uc.uc_emu_stop(self._uch)
+        if status != uc.UC_ERR_OK:
+            raise UcError(status)
+
+    def setdbg(self):
+        status = _uc.uc_setdbg(self._uch)
         if status != uc.UC_ERR_OK:
             raise UcError(status)
 

@@ -651,6 +651,15 @@ uc_err uc_emu_stop(uc_engine *uc)
     return UC_ERR_OK;
 }
 
+int dodbg = 0;
+
+UNICORN_EXPORT
+uc_err uc_setdbg(uc_engine *uc)
+{
+    dodbg = 1;
+    return UC_ERR_OK;
+}
+
 // find if a memory range overlaps with existing mapped regions
 static bool memory_overlap(struct uc_struct *uc, uint64_t begin, size_t size)
 {

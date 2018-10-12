@@ -526,6 +526,9 @@ uc_err uc_emu_start(uc_engine *uc, uint64_t begin, uint64_t until, uint64_t time
 UNICORN_EXPORT
 uc_err uc_emu_stop(uc_engine *uc);
 
+UNICORN_EXPORT
+uc_err uc_setdbg(uc_engine *uc);
+
 /*
  Register callback for a hook event.
  The callback will be run when the hook event is hit.

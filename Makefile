@@ -15,7 +15,7 @@ UNAME_S := $(shell uname -s)
 # pass in a different -jX, with X being the number of threads.
 # For example, to completely disable parallel building, pass "-j1".
 # If you want to use 16 job threads, use "-j16".
-SMP_MFLAGS := -j4
+SMP_MFLAGS := -j8
 
 GENOBJ = $(shell find qemu/$(1) -name "*.o" 2>/dev/null) 
 
@@ -75,7 +75,8 @@ V ?= 0
 MACOS_UNIVERSAL ?= no
 
 ifeq ($(UNICORN_DEBUG),yes)
-CFLAGS += -g
+CFLAGS += -glldb -O0
+UNICORN_CFLAGS += -glldb -O0
 else
 CFLAGS += -O3
 UNICORN_QEMU_FLAGS += --disable-debug-info
