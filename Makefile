@@ -78,7 +78,7 @@ ifeq ($(UNICORN_DEBUG),yes)
 CFLAGS += -glldb -O0
 UNICORN_CFLAGS += -glldb -O0
 else
-CFLAGS += -Ofast -g
+CFLAGS += -O3 -g
 UNICORN_QEMU_FLAGS +=
 endif
 
