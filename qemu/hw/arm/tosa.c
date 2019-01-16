@@ -19,14 +19,15 @@
 
 int tosa_init(struct uc_struct *uc, MachineState *machine)
 {
-#if 0
+#ifndef UNICORN_ARM7TMDI
     if (uc->mode & UC_MODE_MCLASS) {
         uc->cpu = (CPUState *)cpu_arm_init(uc, "cortex-m3");
     } else {
         uc->cpu = (CPUState *)cpu_arm_init(uc, "cortex-a15");
     }
-#endif
+#else
     uc->cpu = (CPUState *)cpu_arm_init(uc, "arm7tdmi");
+#endif
 
     return 0;
 }

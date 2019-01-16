@@ -78,8 +78,8 @@ ifeq ($(UNICORN_DEBUG),yes)
 CFLAGS += -glldb -O0
 UNICORN_CFLAGS += -glldb -O0
 else
-CFLAGS += -O3
-UNICORN_QEMU_FLAGS += --disable-debug-info
+CFLAGS += -Ofast -g
+UNICORN_QEMU_FLAGS +=
 endif
 
 ifeq ($(UNICORN_ASAN),yes)
